@@ -1,6 +1,7 @@
 <template>
 
   <v-container>
+
     <div>
       SERVER: 
       <span :class="serverConnected ? 'green--text' : 'red--text'"> 

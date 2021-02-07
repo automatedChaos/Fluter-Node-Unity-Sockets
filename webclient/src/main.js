@@ -16,6 +16,7 @@ Vue.use(VueRouter)
 Vue.use(Vuex)
 
 const routes = [
+  { path: '/', component: index }, 
   { path: '/index', component: index },
   { path: '/about', component: about },
   { path: '/help', component: help }
