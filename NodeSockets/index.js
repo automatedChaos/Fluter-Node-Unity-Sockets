@@ -32,6 +32,7 @@ wsServer.on('request', function(request) {
 
   // MESSAGE RECEIVED
   connection.on('message', function(data) {
+    console.log(data)
     payload = JSON.parse(data.utf8Data)
     directPayload(payload)
   });

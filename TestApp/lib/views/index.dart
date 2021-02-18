@@ -40,37 +40,52 @@ class _IndexPageState extends State<IndexPage> {
         title: Text("GESTURE DEMO"),
       ),
       body: 
-        Consumer<GestureController>(
-          builder: (context, experience, child) {
-            return GridView.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 4.0,
-              mainAxisSpacing: 8.0,
-              children: <Widget>[
-                Image.asset('white.png'),
-                Opacity(
-                  opacity: gestureController.opacities[0],
-                  child: Image.asset('up.png'),
-                ),
-                Image.asset('white.png'),
-                Opacity(
-                  opacity: gestureController.opacities[1],
-                  child: Image.asset('left.png'),
-                ),
-                Image.asset('white.png'),
-                Opacity(
-                  opacity: gestureController.opacities[2],
-                  child: Image.asset('right.png'),
-                ),
-                Image.asset('white.png'),
-                Opacity(
-                  opacity: gestureController.opacities[3],
-                  child: Image.asset('down.png'),
-                ),
-                Image.asset('white.png'),
-              ],
-            );
-        })
+        Column(
+          children: <Widget> [
+          imageGrid(),
+          Consumer<GestureController>(
+            builder: (context, experience, child) {
+              return Text(gestureController.playerId);
+            }
+          )
+        ]
+      )
     );
+  }
+
+  Widget imageGrid () {
+    return Consumer<GestureController>(
+      builder: (context, experience, child) {
+        return GridView.count(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          crossAxisSpacing: 4.0,
+          mainAxisSpacing: 8.0,
+          children: <Widget>[
+            Image.asset('white.png'),
+            Opacity(
+              opacity: gestureController.opacities[0],
+              child: Image.asset('up.png'),
+            ),
+            Image.asset('white.png'),
+            Opacity(
+              opacity: gestureController.opacities[1],
+              child: Image.asset('left.png'),
+            ),
+            Image.asset('white.png'),
+            Opacity(
+              opacity: gestureController.opacities[2],
+              child: Image.asset('right.png'),
+            ),
+            Image.asset('white.png'),
+            Opacity(
+              opacity: gestureController.opacities[3],
+              child: Image.asset('down.png'),
+            ),
+            Image.asset('white.png'),
+          ],
+        );
+    });
   }
 }
