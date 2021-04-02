@@ -25,7 +25,7 @@ class GestureController extends ChangeNotifier {
   Timer loopTimer;
 
   // TODO: Move into a method and allow user to connect and disconnect
-  final channel = IOWebSocketChannel.connect('ws://192.168.1.126:9898');
+  final channel = IOWebSocketChannel.connect('ws://34.80.38.153:8081');
 
   // Constructor
   GestureController () {
