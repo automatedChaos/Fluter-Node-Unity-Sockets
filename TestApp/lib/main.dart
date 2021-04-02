@@ -6,8 +6,7 @@ import 'package:TestApp/views/index.dart';
 void main() {
   
   runApp(MultiProvider(
-    providers: [
-      
+    providers: [  
       ChangeNotifierProvider(
           create: (context) => new GestureController())
     ],

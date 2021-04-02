@@ -5,7 +5,7 @@ var unknowns = []
 var players = []
 var displays = []
 
-var webSocketPort = 9898
+var webSocketPort = 8081
 
 var server = http.createServer(function(request, response) { /* n/a */})
 
@@ -120,34 +120,6 @@ function newPayload (key, action, data) {
     data: data
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function Player(id, connection){
     this.id = id;
