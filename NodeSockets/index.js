@@ -7,7 +7,11 @@ var displays = []
 
 var webSocketPort = 8081
 
-var server = http.createServer(function(request, response) { /* n/a */})
+var server = http.createServer(function(request, response) { 
+  console.log((new Date()) + ' Received request for ' + request.url);
+  response.writeHead(404);
+  response.end();
+})
 
 server.listen(webSocketPort, function() {
   console.log("Server is listening on port " + webSocketPort);
