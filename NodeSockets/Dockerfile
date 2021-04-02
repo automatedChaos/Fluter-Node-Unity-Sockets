@@ -5,6 +5,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-EXPOSE 8081
+EXPOSE 8081/tcp
+EXPOSE 8081/tcp
 
 CMD [ "node", "index.js" ]
