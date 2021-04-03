@@ -1,3 +1,5 @@
+// compute engine firewall: gcloud compute firewall-rules create allowws --network default --allow tcp:80
+
 var WebSocketServer = require('websocket').server;
 var http = require('http')
 
