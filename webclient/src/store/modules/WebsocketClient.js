@@ -1,7 +1,7 @@
 // initial state
 // shape: [{ id, quantity }]
 const state = () => ({
-  serverAddress: 'ws://34.80.38.153:8083',
+  serverAddress: 'ws://34.80.38.153:8081',
   socket: null,
   isConnected: false,
   connectionKey: 'null',
