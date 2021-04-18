@@ -54,7 +54,15 @@ flutter:
     - left.png
     - right.png
     - white.png
-    - crab.png
+    - crab0.png
+    - crab1.png
+    - crab2.png
+    - crab3.png
+    - crab4.png
+    - crab5.png
+    - crab6.png
+    - background.png
+    - shake.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

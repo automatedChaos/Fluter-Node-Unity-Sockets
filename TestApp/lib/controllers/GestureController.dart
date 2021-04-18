@@ -17,6 +17,7 @@ class GestureController extends ChangeNotifier {
 
   // The unique identifier for this player
   String playerId = "NOT CONNECTED";
+  int playerType = 0;
   
   // values for managing gestures. If active is true all over gesture inputs are blocked
   bool active = false;
@@ -40,6 +41,8 @@ class GestureController extends ChangeNotifier {
 
   void stopConnection () {
     if (channel != null) channel.sink.close();
+    playerType = 0;
+    notifyListeners();
     //stopTimer();
   }
 
@@ -55,6 +58,8 @@ class GestureController extends ChangeNotifier {
         case 'new-connection':
           initPlayer(payload['key']);
           break;
+        case 'player-type':
+          setPlayerType(payload);
       }
     },
     // handle a server disconnect
@@ -84,12 +89,21 @@ class GestureController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setPlayerType(payload) {
+    playerType = payload['data'] + 1;
+    notifyListeners();
+  }
+
   // Send player-position payloads. These will be sent to the Unity project and 
   // will be processed to update the players position
   void sendControl (String direction) {
     Payload payload = new Payload('player-position', direction, this.playerId);
     print(payload.data);
     channel.sink.add(jsonEncode(payload));
+  }
+
+  void sendLocate () {
+    sendControl('0,0');   // no movement so Unity will locate instead
   }
 
   // Initialise the accelerometer listeners
@@ -133,7 +147,7 @@ class GestureController extends ChangeNotifier {
       
       // print("TICK");
       for (int i = 0; i < opacities.length; i++){
-        if (opacities[i] > .2) opacities[i] = opacities[i] - .1; 
+        if (opacities[i] > .5) opacities[i] = opacities[i] - .1; 
       }
        
       this.notifyListeners();
