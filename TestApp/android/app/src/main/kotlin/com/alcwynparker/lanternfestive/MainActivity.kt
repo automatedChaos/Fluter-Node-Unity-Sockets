@@ -1,4 +1,4 @@
-package com.example.TestApp
+package com.alcwynparker.lanternfestive
 
 import io.flutter.embedding.android.FlutterActivity
 
