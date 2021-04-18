@@ -83,7 +83,9 @@ function registerClient (payload) {
     case 'player': 
       switchArray(payload.key, unknowns, players)
       broadcastTo(newPayload(payload.key, 'player-start', payload.key), displays)
-      broadcastTo(newPayload(payload.key, 'payload-type', currentPlayerType), displays)
+      broadcastTo(newPayload(payload.key, 'player-type', currentPlayerType), displays)
+      directTo(payload.key, 'player-type', currentPlayerType)
+      
       currentPlayerType++;
       if (currentPlayerType > 5) currentPlayerType = 0;
       break
