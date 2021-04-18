@@ -4,6 +4,7 @@ import 'package:TestApp/utils/Payload.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/status.dart' as status;
 
 enum directions { 
   FORWARDS, 
@@ -19,19 +20,27 @@ class GestureController extends ChangeNotifier {
   
   // values for managing gestures. If active is true all over gesture inputs are blocked
   bool active = false;
+  bool connected = false;
+
   List<double> opacities = [1, 1, 1, 1];
 
   // this is a game loop timer to allow for animations in opacity 
   Timer loopTimer;
 
   // TODO: Move into a method and allow user to connect and disconnect
-  final channel = IOWebSocketChannel.connect('ws://34.80.38.153:8081');
+  IOWebSocketChannel channel; 
 
   // Constructor
-  GestureController () {
+  void initConnection() {
+    channel = IOWebSocketChannel.connect('ws://34.80.38.153:8081');
     initSocketEvents();
     initAccelerometer();
     startTimer ();
+  }
+
+  void stopConnection () {
+    if (channel != null) channel.sink.close();
+    //stopTimer();
   }
 
   // create the listeners for socket communication
@@ -51,6 +60,7 @@ class GestureController extends ChangeNotifier {
     // handle a server disconnect
     onDone: () {
       playerId = 'NOT CONNECTED';
+      connected = false;
       notifyListeners();
     },
     // handle errors with connecting to the server
@@ -65,6 +75,7 @@ class GestureController extends ChangeNotifier {
     
     // store the unique id for sending messages back to the server
     this.playerId = id;
+    this.connected = true;
 
     // send the server a registration message
     Payload payload = new Payload('register', 'player', id);
@@ -77,32 +88,36 @@ class GestureController extends ChangeNotifier {
   // will be processed to update the players position
   void sendControl (String direction) {
     Payload payload = new Payload('player-position', direction, this.playerId);
+    print(payload.data);
     channel.sink.add(jsonEncode(payload));
   }
 
   // Initialise the accelerometer listeners
   void initAccelerometer() {
 
-    userAccelerometerEvents.listen((UserAccelerometerEvent event) {
+    userAccelerometerEvents.listen((UserAccelerometerEvent event) { 
+    
+      //print(event);
 
       // TODO: Make the sensitivity an instance variable
       if (this.active != true){
-        if (event.z > 5)  {
+        if (event.z  >  2)  {
           setActive(directions.FORWARDS.index);
           sendControl('0,1');
           return;
         }
-        if (event.x > 5)  {
+        if (event.y < -1)  {
           setActive(directions.LEFT.index);
           sendControl('-1,0');
           return;
         }
-        if (event.x < -5) {
+        if (event.y > 1) {
           setActive(directions.RIGHT.index);
           sendControl('1,0');
           return;
         }
-        if (event.z < -5) {
+        if (event.z < -2) {
+          print("DOWN");
           setActive(directions.DOWN.index);
           sendControl('0,-1');
           return;
@@ -120,7 +135,7 @@ class GestureController extends ChangeNotifier {
       for (int i = 0; i < opacities.length; i++){
         if (opacities[i] > .2) opacities[i] = opacities[i] - .1; 
       }
-
+       
       this.notifyListeners();
     });
   }

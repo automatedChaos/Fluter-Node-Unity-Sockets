@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --port 8083",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "serve dist -l tcp://0.0.0.0:8083"
+    "deploy": "serve dist -l tcp://0.0.0.0:8083 // // THIS WORKED WELL:  pm2 serve dist 8083 --spa" 
   },
   "dependencies": {
     "core-js": "^3.6.5",

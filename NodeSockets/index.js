@@ -7,6 +7,8 @@ var unknowns = []
 var players = []
 var displays = []
 
+var currentPlayerType = 0;
+
 var webSocketPort = 8081
 
 var server = http.createServer(function(request, response) { 
@@ -81,6 +83,9 @@ function registerClient (payload) {
     case 'player': 
       switchArray(payload.key, unknowns, players)
       broadcastTo(newPayload(payload.key, 'player-start', payload.key), displays)
+      broadcastTo(newPayload(payload.key, 'payload-type', currentPlayerType), displays)
+      currentPlayerType++;
+      if (currentPlayerType > 5) currentPlayerType = 0;
       break
     default: 
       console.log('Unknown Registration')
@@ -94,7 +99,7 @@ function initDisplay(displayKey) {
   }
 }
 
-// send payload to all clients of a certain type
+// send payload to single client
 function directTo (payload, connection) {
   connection.sendUTF(JSON.stringify(payload))
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:TestApp/controllers/GestureController.dart';
 import 'package:TestApp/views/index.dart';
+import 'package:TestApp/utils/theme.dart';
 
 void main() {
   
@@ -20,11 +21,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Gesture Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      title: '  CRAB  ',
+      theme: myTheme,
       home: IndexPage(),
       routes: <String, WidgetBuilder>{
         IndexPage.routeName: (context) => IndexPage(),
