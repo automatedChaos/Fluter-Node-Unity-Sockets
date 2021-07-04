@@ -17,7 +17,9 @@ class GestureController extends ChangeNotifier {
 
   // The unique identifier for this player
   String playerId = "NOT CONNECTED";
-  int playerType = 0;
+  int playerType = 1;
+  int playerHealth = 100;
+  bool playerComplete = false;
   
   // values for managing gestures. If active is true all over gesture inputs are blocked
   bool active = false;
@@ -33,7 +35,10 @@ class GestureController extends ChangeNotifier {
 
   // Constructor
   void initConnection() {
+    // Production:
     channel = IOWebSocketChannel.connect('ws://34.80.38.153:8081');
+    // Local: 
+    // channel = IOWebSocketChannel.connect('ws://192.168.1.126:8081');
     initSocketEvents();
     initAccelerometer();
     startTimer ();
@@ -41,7 +46,7 @@ class GestureController extends ChangeNotifier {
 
   void stopConnection () {
     if (channel != null) channel.sink.close();
-    playerType = 0;
+    playerHealth = 100;
     notifyListeners();
     //stopTimer();
   }
@@ -60,6 +65,15 @@ class GestureController extends ChangeNotifier {
           break;
         case 'player-type':
           setPlayerType(payload);
+          break;
+        case 'player-damage': 
+          playerHealth = payload["data"];
+          notifyListeners();
+          break;
+        case 'player-complete':
+          playerComplete = true;
+          stopConnection();
+          break;
       }
     },
     // handle a server disconnect

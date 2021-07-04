@@ -69,7 +69,13 @@ function directPayload (payload) {
       break
     case 'player-position':
       broadcastTo(payload, displays)
-      break;
+      break
+    case 'player-damage':
+      addDamage(payload.data)
+      break
+    case 'player-complete':
+      sendComplete(payload.data)
+      break
   } 
 }
 
@@ -80,7 +86,8 @@ function registerClient (payload) {
       switchArray(payload.key, unknowns, displays)
       initDisplay(payload.key)
       break
-    case 'player': 
+    case 'player':
+      unknowns[payload.key].health = 100;
       switchArray(payload.key, unknowns, players)
       broadcastTo(newPayload(payload.key, 'player-start', payload.key), displays)
       broadcastTo(newPayload(payload.key, 'player-type', currentPlayerType), displays)
@@ -130,6 +137,20 @@ function newPayload (key, action, data) {
     key: key,
     action: action,
     data: data
+  }
+}
+
+function addDamage(key) {
+  if (players[key] && players[key].health > 0) {
+    players[key].health-= 5
+    directTo(newPayload(key, 'player-damage', players[key].health), players[key])
+  }
+}
+
+function sendComplete(key) {
+  console.log("COMPLETE: " + key)
+  if (players[key]) {
+    directTo(newPayload(key, 'player-complete', players[key].health), players[key])
   }
 }
 
