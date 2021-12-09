@@ -52,7 +52,7 @@ class GestureController extends ChangeNotifier {
     if (channel != null) channel.sink.close();
     playerHealth = 100;
     notifyListeners();
-    //stopTimer();
+    stopTimer();
   }
 
   // create the listeners for socket communication
@@ -129,8 +129,8 @@ class GestureController extends ChangeNotifier {
 
     gyroscopeEvents.listen((GyroscopeEvent event) {
 
-      double lrAvg = event.x;// = lrQueue.addValue(event.x);
-      double fbAvg = event.y;// = fbQueue.addValue(event.z);
+      double lrAvg = event.x;
+      double fbAvg = event.y;
       double lrLimit = 2;
       double fbLimit = 2;
 
