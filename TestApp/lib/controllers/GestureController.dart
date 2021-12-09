@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'package:TestApp/utils/Payload.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,9 @@ class GestureController extends ChangeNotifier {
   // TODO: Move into a method and allow user to connect and disconnect
   IOWebSocketChannel channel; 
 
+  SensorQueue fbQueue = new SensorQueue();
+  SensorQueue lrQueue = new SensorQueue();
+  
   // Constructor
   void initConnection() {
     // Production:
@@ -123,31 +127,34 @@ class GestureController extends ChangeNotifier {
   // Initialise the accelerometer listeners
   void initAccelerometer() {
 
-    userAccelerometerEvents.listen((UserAccelerometerEvent event) { 
-    
-      //print(event);
+    gyroscopeEvents.listen((GyroscopeEvent event) {
+
+      double lrAvg = event.x;// = lrQueue.addValue(event.x);
+      double fbAvg = event.y;// = fbQueue.addValue(event.z);
+      double lrLimit = 2;
+      double fbLimit = 2;
 
       // TODO: Make the sensitivity an instance variable
       if (this.active != true){
-        if (event.z  >  2)  {
+        if (fbAvg  <  fbLimit * -1)  {
           setActive(directions.FORWARDS.index);
           sendControl('0,1');
           return;
         }
-        if (event.y < -1)  {
+        if (lrAvg > lrLimit) {
           setActive(directions.LEFT.index);
           sendControl('-1,0');
           return;
         }
-        if (event.y > 1) {
+        if (lrAvg < lrLimit * -1) {
           setActive(directions.RIGHT.index);
           sendControl('1,0');
           return;
         }
-        if (event.z < -2) {
+        if (fbAvg > fbLimit) {
           print("DOWN");
           setActive(directions.DOWN.index);
-          sendControl('0,-1');
+          sendControl('0,-.8');
           return;
         }
       }
@@ -187,5 +194,15 @@ class GestureController extends ChangeNotifier {
   setNotActive () {
     this.active = false;
     print("READY");
+  }
+}
+
+class SensorQueue {
+  List<double> values = [];
+
+  double addValue (double value) {
+    values.add(value);
+    if (values.length > 10) values.removeAt(0);
+    return (values.reduce((a, b) => a + b) / values.length);
   }
 }
